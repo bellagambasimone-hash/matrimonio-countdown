@@ -164,7 +164,6 @@
         <div id="cursive-text"></div>
 
         <div id="countdown-container" class="hidden">
-            <div>Mancano esattamente:</div>
             <div class="time-box">
                 <div class="time-unit"><span id="days" class="time-value">0</span><span class="time-label">Giorni</span></div>
                 <div class="time-unit"><span id="hours" class="time-value">0</span><span class="time-label">Ore</span></div>
@@ -174,7 +173,7 @@
         </div>
 
         <div id="horror-text" class="hidden">
-            Il conto alla rovescia per i chili da perdere è iniziato...
+            Il conto alla rovescia per i chili da perdere è iniziato buona fortuna
         </div>
     </div>
 
@@ -219,7 +218,7 @@
             // Aspetta 1.5 secondi per far finire l'animazione, poi nasconde il cancello e scrive il testo
             setTimeout(() => {
                 document.getElementById('step1').classList.add('hidden');
-                typeWriter("Benedetta e Simone si sposeranno:", "cursive-text", 80, () => {
+                typeWriter("Benedetta e Simone si sposeranno tra", "cursive-text", 80, () => {
                     // Quando finisce di scrivere, permette di passare allo step successivo
                     currentStep = 2; 
                 });
@@ -248,7 +247,7 @@
         let countdownInterval;
         function startCountdown() {
             // Data del matrimonio: 8 Agosto 2026 a mezzanotte
-            const countDownDate = new Date("August 8, 2026 00:00:00").getTime();
+            const countDownDate = new Date("August 8, 2026 16:00:00").getTime();
 
             countdownInterval = setInterval(() => {
                 const now = new Date().getTime();
