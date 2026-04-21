@@ -14,18 +14,27 @@
 body {
     margin: 0;
     font-family: 'Montserrat', sans-serif;
-    background: #fdf6f0;
+    background: linear-gradient(to bottom, #ffffff, #f7e7e1);
     overflow: hidden;
     text-align: center;
     color: #5a3e36;
 }
 
-/* SCHERMATA INIZIALE */
+/* SFONDO LUMINOSO */
+.bg-light {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.4) 40%, transparent 70%);
+    z-index: 0;
+}
+
+/* START */
 .start {
     position: fixed;
     width: 100%;
     height: 100%;
-    background: #fdf6f0;
+    background: #fff;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -33,41 +42,38 @@ body {
     z-index: 10;
 }
 
-/* MANI */
+/* MANI REALISTICHE */
 .hands {
     position: fixed;
     width: 100%;
-    top: 40%;
+    top: 35%;
     display: flex;
-    justify-content: space-between;
-    padding: 0 10%;
-    font-size: 3em;
-    opacity: 1;
-    transition: all 2s ease;
+    justify-content: center;
+    z-index: 2;
 }
 
-.hands span {
-    transition: transform 2s ease;
+.hands img {
+    width: 300px;
+    transition: transform 2s ease, opacity 2s ease;
 }
 
-.open .left-hand {
-    transform: translateX(-200px);
-}
-
-.open .right-hand {
-    transform: translateX(200px);
+.open .hands img {
+    transform: scale(0.8) translateY(-50px);
+    opacity: 0;
 }
 
 /* CONTENUTO */
 .content {
     display: none;
+    position: relative;
+    z-index: 3;
     padding-top: 25vh;
 }
 
-/* SCRITTA */
+/* SCRITTA ELEGANTE */
 h1 {
     font-family: 'Great Vibes', cursive;
-    font-size: 3.2em;
+    font-size: 3.5em;
 }
 
 /* CURSORE */
@@ -90,25 +96,27 @@ h1 {
     opacity: 0.7;
 }
 
-/* CUORI */
+/* CUORI SOFT */
 .heart {
     position: fixed;
     bottom: 0;
-    color: rgba(232, 167, 167, 0.5);
-    animation: float 6s linear infinite;
+    color: rgba(232, 167, 167, 0.4);
+    animation: float 8s linear infinite;
 }
 
 @keyframes float {
     0% { transform: translateY(0); opacity: 0; }
-    50% { opacity: 1; }
-    100% { transform: translateY(-100vh); opacity: 0; }
+    30% { opacity: 1; }
+    100% { transform: translateY(-120vh); opacity: 0; }
 }
 </style>
 </head>
 
 <body>
 
-<!-- AUDIO UCCELLINI -->
+<div class="bg-light"></div>
+
+<!-- AUDIO -->
 <audio id="birds" src="https://www.soundjay.com/nature/sounds/birds-1.mp3" loop></audio>
 
 <!-- START -->
@@ -116,10 +124,9 @@ h1 {
     Tocca per entrare 💍
 </div>
 
-<!-- MANI -->
+<!-- MANI (IMMAGINE REALISTICA) -->
 <div class="hands" id="hands">
-    <span class="left-hand">🤝</span>
-    <span class="right-hand">🤝</span>
+    <img src="https://images.unsplash.com/photo-1522673607200-164d1b6ce486" alt="mani">
 </div>
 
 <!-- CONTENUTO -->
@@ -142,18 +149,14 @@ document.getElementById("start").addEventListener("click", () => {
     document.getElementById("start").style.display = "none";
 
     setTimeout(() => {
-        document.getElementById("hands").style.opacity = "0";
-    }, 1500);
-
-    setTimeout(() => {
         document.getElementById("content").style.display = "block";
         typeText("Benedetta & Simone");
         startHearts();
-    }, 1800);
+    }, 2000);
 
 });
 
-// SCRITTURA MIGLIORATA
+// SCRITTURA PIÙ FLUIDA
 function typeText(text) {
     let i = 0;
     const el = document.getElementById("names");
@@ -165,7 +168,7 @@ function typeText(text) {
             clearInterval(interval);
             el.innerHTML = text;
         }
-    }, 80);
+    }, 70);
 }
 
 // COUNTDOWN
@@ -195,12 +198,12 @@ function startHearts() {
         heart.innerHTML = "❤";
 
         heart.style.left = Math.random() * 100 + "vw";
-        heart.style.fontSize = (10 + Math.random() * 20) + "px";
+        heart.style.fontSize = (10 + Math.random() * 25) + "px";
 
         document.body.appendChild(heart);
 
-        setTimeout(() => heart.remove(), 6000);
-    }, 300);
+        setTimeout(() => heart.remove(), 8000);
+    }, 400);
 }
 
 </script>
