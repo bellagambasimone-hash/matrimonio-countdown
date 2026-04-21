@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Matrimonio</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@300;500&display=swap" rel="stylesheet">
@@ -12,25 +13,25 @@ body {
     margin: 0;
     overflow: hidden;
     font-family: 'Montserrat', sans-serif;
-    background: #000;
+    background: black;
 }
 
-/* PORTE */
+/* PORTE REALISTICHE */
 .door {
     position: fixed;
     top: 0;
     width: 50%;
     height: 100%;
-    background: #5a3e36;
+    background: linear-gradient(to right, #4b2e2e, #7a4b4b);
     z-index: 10;
     transition: transform 2s ease;
 }
 
-.left { left: 0; border-right: 2px solid #fff; }
-.right { right: 0; border-left: 2px solid #fff; }
+.left { left: 0; transform-origin: left; }
+.right { right: 0; transform-origin: right; }
 
-.open .left { transform: translateX(-100%); }
-.open .right { transform: translateX(100%); }
+.open .left { transform: rotateY(-90deg); }
+.open .right { transform: rotateY(90deg); }
 
 /* LUCE */
 .light {
@@ -44,6 +45,7 @@ body {
 }
 
 .show-light { opacity: 1; }
+.hide-light { opacity: 0; }
 
 /* CONTENUTO */
 .content {
@@ -55,30 +57,19 @@ body {
     transform: translateY(-50%);
     opacity: 0;
     transition: opacity 2s ease;
-    padding: 20px;
 }
 
-.show-content {
-    opacity: 1;
-}
+.show-content { opacity: 1; }
 
 h1 {
     font-family: 'Great Vibes', cursive;
     font-size: 3em;
 }
 
-/* effetto scrittura */
-.typing {
+/* scrittura vera */
+.cursor {
     border-right: 2px solid #5a3e36;
-    white-space: nowrap;
-    overflow: hidden;
-    width: 0;
-    animation: typing 3s steps(30, end) forwards, blink 0.7s infinite;
-}
-
-@keyframes typing {
-    from { width: 0 }
-    to { width: 100% }
+    animation: blink 0.7s infinite;
 }
 
 @keyframes blink {
@@ -87,7 +78,6 @@ h1 {
 
 .date {
     margin: 10px 0;
-    font-size: 1.2em;
 }
 
 #countdown {
@@ -99,38 +89,20 @@ h1 {
     font-style: italic;
     opacity: 0.8;
 }
-
-/* CUORI */
-.heart {
-    position: fixed;
-    color: #e8a7a7;
-    font-size: 20px;
-    animation: float 6s linear infinite;
-}
-
-@keyframes float {
-    0% { transform: translateY(100vh); opacity: 0; }
-    50% { opacity: 1; }
-    100% { transform: translateY(-10vh); opacity: 0; }
-}
 </style>
 </head>
 
 <body>
 
-<!-- AUDIO CAMPANE -->
 <audio id="bells" src="https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3"></audio>
 
-<!-- PORTE -->
 <div class="door left"></div>
 <div class="door right"></div>
 
-<!-- LUCE -->
 <div class="light" id="light"></div>
 
-<!-- CONTENUTO -->
 <div class="content" id="content">
-    <h1 id="names" class="typing"></h1>
+    <h1 id="names"></h1>
     <div class="date">si sposeranno tra</div>
     <div id="countdown"></div>
     <div class="extra">ps. sono i giorni che hai per dimagrire 😈</div>
@@ -138,27 +110,45 @@ h1 {
 
 <script>
 
-// CLICK PER APRIRE
+// APERTURA
 document.body.addEventListener("click", () => {
     document.body.classList.add("open");
 
-    // suono campane
-    const audio = document.getElementById("bells");
-    audio.play().catch(() => {});
+    document.getElementById("bells").play().catch(()=>{});
 
     setTimeout(() => {
         document.getElementById("light").classList.add("show-light");
-    }, 800);
+    }, 500);
+
+    // TOGLIE LA LUCE → fondamentale
+    setTimeout(() => {
+        document.getElementById("light").classList.add("hide-light");
+    }, 1800);
 
     setTimeout(() => {
         document.getElementById("content").classList.add("show-content");
+        typeText("Benedetta & Simone");
+    }, 2200);
 
-        // scrittura nome
-        document.getElementById("names").textContent = "Benedetta & Simone";
-
-        startHearts();
-    }, 2000);
 }, { once: true });
+
+
+// EFFETTO SCRITTURA (vero, non CSS finto)
+function typeText(text) {
+    let i = 0;
+    const el = document.getElementById("names");
+    el.innerHTML = "";
+
+    const interval = setInterval(() => {
+        el.innerHTML = text.substring(0, i) + '<span class="cursor"></span>';
+        i++;
+        if (i > text.length) {
+            clearInterval(interval);
+            el.innerHTML = text;
+        }
+    }, 100);
+}
+
 
 // COUNTDOWN
 const targetDate = new Date("August 8, 2026 00:00:00").getTime();
@@ -183,22 +173,6 @@ function updateCountdown() {
 
 setInterval(updateCountdown, 1000);
 updateCountdown();
-
-// CUORI
-function startHearts() {
-    setInterval(() => {
-        const heart = document.createElement("div");
-        heart.classList.add("heart");
-        heart.innerHTML = "❤";
-
-        heart.style.left = Math.random() * 100 + "vw";
-        heart.style.fontSize = (10 + Math.random() * 20) + "px";
-
-        document.body.appendChild(heart);
-
-        setTimeout(() => heart.remove(), 6000);
-    }, 300);
-}
 
 </script>
 
