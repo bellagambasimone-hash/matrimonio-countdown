@@ -8,15 +8,16 @@
 
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 
-<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@300;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:ital@1&family=Montserrat:wght@300;500&display=swap" rel="stylesheet">
 
 <style>
 body {
     margin: 0;
     font-family: 'Montserrat', sans-serif;
-    background: black;
-    color: #5a3e36;
+    background: #fdf6f0;
+    overflow: hidden;
     text-align: center;
+    color: #5a3e36;
 }
 
 /* SCHERMATA INIZIALE */
@@ -24,25 +25,49 @@ body {
     position: fixed;
     width: 100%;
     height: 100%;
-    background: linear-gradient(#2c1b1b, #5a3e36);
+    background: #fdf6f0;
     display: flex;
     justify-content: center;
     align-items: center;
     font-size: 1.5em;
-    color: white;
     z-index: 10;
+}
+
+/* MANI */
+.hands {
+    position: fixed;
+    width: 100%;
+    top: 40%;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 10%;
+    font-size: 3em;
+    opacity: 1;
+    transition: all 2s ease;
+}
+
+.hands span {
+    transition: transform 2s ease;
+}
+
+.open .left-hand {
+    transform: translateX(-200px);
+}
+
+.open .right-hand {
+    transform: translateX(200px);
 }
 
 /* CONTENUTO */
 .content {
     display: none;
-    padding-top: 30vh;
+    padding-top: 25vh;
 }
 
 /* SCRITTA */
 h1 {
     font-family: 'Great Vibes', cursive;
-    font-size: 3em;
+    font-size: 3.2em;
 }
 
 /* CURSORE */
@@ -62,19 +87,39 @@ h1 {
 
 .extra {
     font-style: italic;
-    opacity: 0.8;
+    opacity: 0.7;
+}
+
+/* CUORI */
+.heart {
+    position: fixed;
+    bottom: 0;
+    color: rgba(232, 167, 167, 0.5);
+    animation: float 6s linear infinite;
+}
+
+@keyframes float {
+    0% { transform: translateY(0); opacity: 0; }
+    50% { opacity: 1; }
+    100% { transform: translateY(-100vh); opacity: 0; }
 }
 </style>
 </head>
 
 <body>
 
-<!-- AUDIO -->
-<audio id="bells" src="https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3"></audio>
+<!-- AUDIO UCCELLINI -->
+<audio id="birds" src="https://www.soundjay.com/nature/sounds/birds-1.mp3" loop></audio>
 
-<!-- SCHERMATA CLICK -->
+<!-- START -->
 <div class="start" id="start">
     Tocca per entrare 💍
+</div>
+
+<!-- MANI -->
+<div class="hands" id="hands">
+    <span class="left-hand">🤝</span>
+    <span class="right-hand">🤝</span>
 </div>
 
 <!-- CONTENUTO -->
@@ -90,21 +135,25 @@ h1 {
 // CLICK
 document.getElementById("start").addEventListener("click", () => {
 
-    // suono
-    document.getElementById("bells").play().catch(()=>{});
+    document.body.classList.add("open");
 
-    // nasconde start
+    document.getElementById("birds").play().catch(()=>{});
+
     document.getElementById("start").style.display = "none";
 
-    // mostra contenuto
-    document.getElementById("content").style.display = "block";
+    setTimeout(() => {
+        document.getElementById("hands").style.opacity = "0";
+    }, 1500);
 
-    // scrittura nome
-    typeText("Benedetta & Simone");
+    setTimeout(() => {
+        document.getElementById("content").style.display = "block";
+        typeText("Benedetta & Simone");
+        startHearts();
+    }, 1800);
 
 });
 
-// SCRITTURA
+// SCRITTURA MIGLIORATA
 function typeText(text) {
     let i = 0;
     const el = document.getElementById("names");
@@ -137,6 +186,22 @@ function updateCountdown() {
 
 setInterval(updateCountdown, 1000);
 updateCountdown();
+
+// CUORI
+function startHearts() {
+    setInterval(() => {
+        const heart = document.createElement("div");
+        heart.classList.add("heart");
+        heart.innerHTML = "❤";
+
+        heart.style.left = Math.random() * 100 + "vw";
+        heart.style.fontSize = (10 + Math.random() * 20) + "px";
+
+        document.body.appendChild(heart);
+
+        setTimeout(() => heart.remove(), 6000);
+    }, 300);
+}
 
 </script>
 
