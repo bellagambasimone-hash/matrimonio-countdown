@@ -8,14 +8,13 @@
     <link href="https://fonts.googleapis.com/css2?family=Creepster&family=Great+Vibes&family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
     
     <style>
-        /* Stili di base e Sfondo Romantico */
         body {
             margin: 0;
             padding: 0;
             height: 100vh;
-            background: linear-gradient(135deg, #ffd1dc, #ffb6c1, #ffc0cb); /* Sfondo rosa romantico */
+            background: linear-gradient(135deg, #ffd1dc, #ffb6c1, #ffc0cb);
             font-family: 'Montserrat', sans-serif;
-            overflow: hidden; /* Nasconde lo scorrimento */
+            overflow: hidden;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -24,14 +23,13 @@
             color: #333;
         }
 
-        /* Contenitore per i cuoricini animati */
         #hearts-container {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            pointer-events: none; /* Impedisce che i cuori blocchino i tocchi */
+            pointer-events: none;
             z-index: 1;
         }
 
@@ -48,7 +46,6 @@
             100% { transform: translateY(-120vh) scale(1.5); opacity: 0; }
         }
 
-        /* Contenitore principale (Sopra i cuori) */
         #main-content {
             position: relative;
             z-index: 10;
@@ -60,48 +57,42 @@
             gap: 30px;
         }
 
-        /* STEP 1: Istruzioni e Cancello */
+        /* STEP 1: Istruzioni e Luce Paradisiaca */
         #instruction {
             font-size: 1.2rem;
             font-weight: 600;
             color: #d81b60;
             transition: opacity 0.5s ease;
+            margin-bottom: 50px;
+            text-shadow: 0 0 10px rgba(255,255,255,0.8);
         }
 
-        #gate-container {
-            display: flex;
-            justify-content: center;
-            width: 200px;
-            height: 150px;
+        /* Effetto Luce Celestiale */
+        #light-portal {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: radial-gradient(circle, #ffffff 30%, rgba(255, 255, 255, 0.6) 60%, rgba(255, 255, 255, 0) 100%);
+            box-shadow: 0 0 40px 20px rgba(255, 255, 255, 0.8), 0 0 80px 40px rgba(255, 255, 255, 0.4);
             cursor: pointer;
-            position: relative;
-            perspective: 1000px;
-        }
-
-        .door {
-            width: 50%;
-            height: 100%;
-            background: repeating-linear-gradient(90deg, transparent, transparent 15px, #4a4a4a 15px, #4a4a4a 20px);
-            border: 4px solid #4a4a4a;
-            border-bottom: none;
+            margin: 0 auto;
+            /* Animazione che fa pulsare la luce */
+            animation: pulseLight 2s infinite alternate ease-in-out;
+            /* Transizione per l'espansione al click */
             transition: transform 1.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 1.5s ease;
         }
 
-        .left-door {
-            border-radius: 20px 0 0 0;
-            border-right: 2px solid #4a4a4a;
-            transform-origin: left;
+        @keyframes pulseLight {
+            0% { transform: scale(0.9); box-shadow: 0 0 30px 15px rgba(255, 255, 255, 0.7), 0 0 60px 30px rgba(255, 255, 255, 0.3); }
+            100% { transform: scale(1.15); box-shadow: 0 0 60px 30px rgba(255, 255, 255, 1), 0 0 120px 50px rgba(255, 255, 255, 0.7); }
         }
 
-        .right-door {
-            border-radius: 0 20px 0 0;
-            border-left: 2px solid #4a4a4a;
-            transform-origin: right;
+        /* Classe aggiunta al click: la luce esplode e svanisce */
+        .light-open {
+            animation: none !important;
+            transform: scale(25) !important;
+            opacity: 0;
         }
-
-        /* Animazione apertura cancello */
-        .gate-open .left-door { transform: translateX(-150%) rotateY(-30deg); opacity: 0; }
-        .gate-open .right-door { transform: translateX(150%) rotateY(30deg); opacity: 0; }
 
         /* STEP 2: Testo Corsivo */
         #cursive-text {
@@ -114,13 +105,14 @@
 
         /* STEP 3: Countdown */
         #countdown-container {
-            background: rgba(255, 255, 255, 0.6);
+            background: rgba(255, 255, 255, 0.7);
             padding: 15px;
             border-radius: 15px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
             font-size: 1.2rem;
             font-weight: 600;
             color: #d81b60;
+            backdrop-filter: blur(5px);
         }
 
         .time-box { display: flex; gap: 10px; justify-content: center; margin-top: 10px; }
@@ -138,7 +130,6 @@
             line-height: 1.2;
         }
 
-        /* Classi di utilità */
         .hidden { display: none !important; }
         .fade-in { animation: fadeIn 1s forwards; }
         
@@ -155,15 +146,13 @@
     <div id="main-content">
         <div id="step1">
             <p id="instruction">Tocca per proseguire</p>
-            <div id="gate-container" onclick="openGate(event)">
-                <div class="door left-door"></div>
-                <div class="door right-door"></div>
-            </div>
+            <div id="light-portal" onclick="openHeaven(event)"></div>
         </div>
 
         <div id="cursive-text"></div>
 
         <div id="countdown-container" class="hidden">
+            <div>Mancano esattamente:</div>
             <div class="time-box">
                 <div class="time-unit"><span id="days" class="time-value">0</span><span class="time-label">Giorni</span></div>
                 <div class="time-unit"><span id="hours" class="time-value">0</span><span class="time-label">Ore</span></div>
@@ -173,59 +162,47 @@
         </div>
 
         <div id="horror-text" class="hidden">
-            il countdown corre… tu un po’ meno 🫃🏻🤰 FORZA 🏃🏻‍➡️🏃🏼‍♀️‍➡️
+            il countdown corre… tu un po’ meno 🫃🏻🤰🏼 FORZA! 🏃🏻‍➡️🏃🏼‍♀️‍➡️
         </div>
     </div>
 
     <script>
-        // Generatore di cuoricini animati continui
         function createHeart() {
             const container = document.getElementById('hearts-container');
             const heart = document.createElement('div');
             heart.classList.add('heart');
             heart.innerText = '❤️';
-            // Posizione orizzontale casuale
             heart.style.left = Math.random() * 100 + 'vw';
-            // Durata animazione casuale (tra 4 e 8 secondi)
             heart.style.animationDuration = (Math.random() * 4 + 4) + 's';
-            // Dimensione casuale
             heart.style.fontSize = (Math.random() * 15 + 15) + 'px';
             
             container.appendChild(heart);
-            
-            // Rimuove il cuoricino dopo che è uscito dallo schermo per non appesantire la memoria
             setTimeout(() => { heart.remove(); }, 8000);
         }
-        setInterval(createHeart, 400); // Crea un cuore ogni 400ms
+        setInterval(createHeart, 400);
 
-        // Variabile per gestire i vari tap sullo schermo
         let currentStep = 0;
 
-        // Funzione STEP 1: Aprire il cancello
-        function openGate(event) {
-            // Impedisce che il click sul cancello venga contato anche come tap sullo schermo
+        // Funzione per espandere la luce
+        function openHeaven(event) {
             event.stopPropagation(); 
-            
             if (currentStep !== 0) return;
             currentStep = 1;
 
-            // Nasconde la scritta "Tocca per proseguire"
             document.getElementById('instruction').style.opacity = '0';
             
-            // Applica la classe per aprire il cancello
-            document.getElementById('gate-container').classList.add('gate-open');
+            // Aggiunge la classe che fa espandere la luce
+            document.getElementById('light-portal').classList.add('light-open');
 
-            // Aspetta 1.5 secondi per far finire l'animazione, poi nasconde il cancello e scrive il testo
+            // Aspetta che l'animazione della luce finisca
             setTimeout(() => {
                 document.getElementById('step1').classList.add('hidden');
-                typeWriter("Benedetta e Simone si sposeranno tra", "cursive-text", 80, () => {
-                    // Quando finisce di scrivere, permette di passare allo step successivo
+                typeWriter("Benedetta e Simone si sposeranno tra:", "cursive-text", 80, () => {
                     currentStep = 2; 
                 });
-            }, 1500);
+            }, 1200);
         }
 
-        // Effetto "Macchina da scrivere" per il testo corsivo
         function typeWriter(text, elementId, speed, callback) {
             let i = 0;
             let element = document.getElementById(elementId);
@@ -243,11 +220,9 @@
             type();
         }
 
-        // Funzione per il Countdown
         let countdownInterval;
         function startCountdown() {
-            // Data del matrimonio: 8 Agosto 2026 a mezzanotte
-            const countDownDate = new Date("August 8, 2026 16:00:00").getTime();
+            const countDownDate = new Date("August 8, 2026 00:00:00").getTime();
 
             countdownInterval = setInterval(() => {
                 const now = new Date().getTime();
@@ -266,16 +241,13 @@
             }, 1000);
         }
 
-        // Gestione dei tap successivi in qualsiasi punto dello schermo
         document.body.addEventListener('click', () => {
             if (currentStep === 2) {
-                // STEP 3: Mostra il Countdown
                 document.getElementById('countdown-container').classList.remove('hidden');
                 document.getElementById('countdown-container').classList.add('fade-in');
                 startCountdown();
                 currentStep = 3;
             } else if (currentStep === 3) {
-                // STEP 4: Mostra il Testo Horror
                 document.getElementById('horror-text').classList.remove('hidden');
                 document.getElementById('horror-text').classList.add('fade-in');
                 currentStep = 4;
